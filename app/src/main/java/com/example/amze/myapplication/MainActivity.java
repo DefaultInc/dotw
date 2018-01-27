@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> wifiNetworkList = new ArrayList<String>();
     private WifiManager wifiManager;
-    ConnectivityManager cman;
-    private MyServer serverInstance = MyServer.getInstance();
+
+
     private Boolean serverRunningState = false;
     ListView wifiList;
 
@@ -45,19 +45,22 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
         button = findViewById(R.id.button);
         wifiList = findViewById(R.id.ListView);
 //        this.serverRunningState = this.serverInstance.startServer();
-        cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
 
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0x12345);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//          connectToWifi("smartpoint", "smartpoint");
             Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-            intent.setAction(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            intent.setAction(Settings.ACTION_WIFI_SETTINGS);
+            intent.putExtra("action", "shareWifi");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 //          WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
             }
@@ -105,16 +108,11 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
             }
-            wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+
             registerReceiver(mWifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             wifiManager.startScan();
-        } else if(requestCode == 0x2) {
-
-            for (int grantResult : grantResults) {
-                System.out.println(grantResult != PackageManager.PERMISSION_GRANTED );
-            }
-            WifiProvider.shareWifi("offchat_dauren", "secret", wifiManager, cman);
         }
+
     }
 
 
