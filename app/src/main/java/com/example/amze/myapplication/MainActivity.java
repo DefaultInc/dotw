@@ -15,42 +15,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
-import java.lang.reflect.Method;
+import com.example.amze.myapplication.tools.MyServer;
+import com.example.amze.myapplication.tools.WifiProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<ScanResult> wifis = new ArrayList<ScanResult>();
-    WifiManager wifiManager;
+    private List<String> wifiNetworkList = new ArrayList<String>();
+    private WifiManager wifiManager;
+    private MyServer serverInstance = MyServer.getInstance();
+    private Boolean serverRunningState = false;
+    ListView wifiList;
 
-    private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context c, Intent intent) {
-            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-//                List<ScanResult> mScanResults = wifiManager.getScanResults();
-                wifis = wifiManager.getScanResults();
-//                for (ScanResult wifi: mScanResults) {
-//                    if()
-//                }
-                Log.d("number of wifi", wifis.size() + "");
-            }
-        }
-    };
-
-    private void connectToWifi(String ssid, String pass) {
-        WifiConfiguration wifiConfig = new WifiConfiguration();
-        wifiConfig.SSID = String.format("\"%s\"", ssid);
-        wifiConfig.preSharedKey = String.format("\"%s\"", pass);
-
-        int netId = wifiManager.addNetwork(wifiConfig);
-        wifiManager.disconnect();
-        wifiManager.enableNetwork(netId, true);
-        wifiManager.reconnect();
-
-    }
 
     Button button;
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -60,23 +42,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
+//        this.serverRunningState = this.serverInstance.startServer();
 
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0x12345);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                try {
-//                    MyServer server = new MyServer();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-                connectToWifi("smartpoint", "smartpoint");
-
+//                connectToWifi("smartpoint", "smartpoint");
+                WifiProvider.shareWifi("offchat_dauren", "secret", wifiManager);
+//                WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
             }
+
         });
 
     }
+
+    private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context c, Intent intent) {
+            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+//                List<ScanResult> mScanResults = wifiManager.getScanResults();
+                for (ScanResult result: (List<ScanResult>)wifiManager.getScanResults()) {
+                    wifiNetworkList.add(result.SSID);
+                }
+//                for (ScanResult wifi: mScanResults) {
+//                    if()
+//                }
+                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, wifiNetworkList);
+                wifiList.setAdapter(itemsAdapter);
+                Log.d("number of wifi", wifiNetworkList.size() + "");
+            }
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -95,8 +93,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
 }
-
-
