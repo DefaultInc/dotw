@@ -10,14 +10,14 @@ import android.widget.ListView;
 import com.example.amze.myapplication.tools.MyServer;
 
 public class ChatActivity extends AppCompatActivity {
-
+    ListView view;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         MyServer.getInstance();
         Intent intent = getIntent();
-
+        view = findViewById(R.id.message_list);
         Log.d("a", intent.getStringExtra("name").toString());
 
     }
