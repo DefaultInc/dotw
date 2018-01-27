@@ -2,7 +2,10 @@ package com.example.amze.myapplication;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
+import android.app.AlertDialog;
+
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -17,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.amze.myapplication.tools.MyServer;
@@ -28,13 +32,16 @@ public class ChatActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
     ConnectivityManager cman;
-    private MyServer serverInstance = MyServer.getInstance();
+
     MyServer myServer = MyServer.getInstance();
     ListView view;
     Intent intent;
     String ssid = null;
     String myIp = null;
     String hostIp = null;
+
+
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -46,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         intent = getIntent();
 //        myServer.startServer();
+        view = findViewById(R.id.message_list);
         MyServer.initiater.addListener(new MyServer.Responder() {
             @Override
             public void someoneSaidHello(String user, String msg) {
@@ -85,6 +93,8 @@ public class ChatActivity extends AppCompatActivity {
         ConnectivityManager connManager = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+
     }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
