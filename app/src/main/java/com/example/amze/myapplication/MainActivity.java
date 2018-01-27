@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
                     String ssid = (String) listView.getAdapter().getItem(position);
                     Intent intent = new Intent(listView.getContext(), ChatActivity.class);
-                    intent.putExtra("name", ssid);
+                    intent.putExtra("ssid", ssid);
                     listView.getContext().startActivity(intent);
                 }
 
