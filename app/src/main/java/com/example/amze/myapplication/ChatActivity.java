@@ -18,6 +18,7 @@ public class ChatActivity extends AppCompatActivity {
         MyServer.getInstance();
         Intent intent = getIntent();
         Log.d("a", intent.toString());
+        
     }
 
 }

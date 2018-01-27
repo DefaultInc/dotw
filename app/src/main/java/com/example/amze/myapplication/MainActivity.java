@@ -55,12 +55,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                connectToWifi("smartpoint", "smartpoint");
-
-                requestPermissions(new String[]{Manifest.permission.CHANGE_WIFI_STATE,Manifest.permission.WRITE_SETTINGS, Manifest.permission.ACCESS_WIFI_STATE}, 0x2);
-
-
-//                WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
+//          connectToWifi("smartpoint", "smartpoint");
+            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            intent.setAction(android.provider.Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            startActivity(intent);
+//          WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
             }
 
         });
@@ -70,30 +69,30 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context c, Intent intent) {
-            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+        if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
 //                List<ScanResult> mScanResults = wifiManager.getScanResults();
-                for (ScanResult result: (List<ScanResult>)wifiManager.getScanResults()) {
-                    wifiNetworkList.add(result.SSID);
-                }
+            for (ScanResult result: (List<ScanResult>)wifiManager.getScanResults()) {
+                wifiNetworkList.add(result.SSID);
+            }
 
 //                for (ScanResult wifi: mScanResults) {
 //                    if()
 //                }
-                if(wifiNetworkList != null && wifiNetworkList.size() != 0 ) {
-                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, wifiNetworkList);
-                    wifiList.setAdapter(itemsAdapter);
-                }
-                wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-                        String grocery = (String) listView.getAdapter().getItem(position);
-                        Intent intent = new Intent(listView.getContext(), ChatActivity.class);
-                        listView.getContext().startActivity(intent);
-                    }
-                });
-                Log.d("number of wifi", wifiNetworkList.size() + "");
-
+            if(wifiNetworkList != null && wifiNetworkList.size() != 0 ) {
+                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, wifiNetworkList);
+                wifiList.setAdapter(itemsAdapter);
             }
+            wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                    String grocery = (String) listView.getAdapter().getItem(position);
+                    Intent intent = new Intent(listView.getContext(), ChatActivity.class);
+                    listView.getContext().startActivity(intent);
+                }
+            });
+            Log.d("number of wifi", wifiNetworkList.size() + "");
+
+        }
         }
     };
 
