@@ -6,4 +6,23 @@
     android:layout_height="match_parent"
     tools:context="com.example.amze.myapplication.ChatActivity">
 
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/textView"
+        android:layout_width="302dp"
+        android:layout_height="48dp"
+        android:text=""
+        android:hint="Write Me :)"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/textView" ></Button>
+
 </android.support.constraint.ConstraintLayout>

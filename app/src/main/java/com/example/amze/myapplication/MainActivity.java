@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         button = findViewById(R.id.button);
 //        this.serverRunningState = this.serverInstance.startServer();
-
+        wifiList = findViewById(R.id.ListView);
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0x12345);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
 //                }
                 ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, wifiNetworkList);
                 wifiList.setAdapter(itemsAdapter);
+                wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                        String grocery = (String) listView.getAdapter().getItem(position);
+                        Intent intent = new Intent(listView.getContext(), ChatActivity.class);
+                        listView.getContext().startActivity(intent);
+                    }
+                });
                 Log.d("number of wifi", wifiNetworkList.size() + "");
             }
         }
