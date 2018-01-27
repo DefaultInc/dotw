@@ -17,7 +17,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         MyServer.getInstance();
         Intent intent = getIntent();
-        Log.d("a", intent.toString());
+        Log.d("a", intent.getStringExtra("name").toString());
     }
 
 }

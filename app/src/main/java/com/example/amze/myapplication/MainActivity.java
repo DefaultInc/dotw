@@ -86,8 +86,9 @@ public class MainActivity extends AppCompatActivity {
                 wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-                        String grocery = (String) listView.getAdapter().getItem(position);
+                        String ssid = (String) listView.getAdapter().getItem(position);
                         Intent intent = new Intent(listView.getContext(), ChatActivity.class);
+                        intent.putExtra("name", ssid);
                         listView.getContext().startActivity(intent);
                     }
                 });
