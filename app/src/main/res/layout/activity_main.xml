@@ -18,6 +18,5 @@
         android:layout_height="wrap_content"
         android:text="Start Server"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="parent"></Button>
-
+        app:layout_constraintLeft_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

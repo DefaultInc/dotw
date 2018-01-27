@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="8dp">
+    android:paddingTop="8dp"
+    tools:context="com.example.amze.myapplication.MainActivity">
 
     <TextView
         android:id="@+id/text_message_body"
-        app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
-        app:layout_constraintTop_toBottomOf="@+id/text_message_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_rectangle_bubble"
@@ -18,12 +18,11 @@
         android:text="hi man, how are you?"
         android:textColor="#ffffff"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="4dp" />
+        tools:layout_editor_absoluteY="4dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/text_sender_body"
-        app:layout_constraintLeft_toRightOf="@+id/image_message_profile"
-        app:layout_constraintTop_toBottomOf="@+id/text_message_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_rectangle_bubble_sender"
@@ -32,5 +31,6 @@
         android:text="hi man, how are you?"
         android:textColor="#ffffff"
         tools:layout_editor_absoluteX="240dp"
-        tools:layout_editor_absoluteY="30dp" />
+        tools:layout_editor_absoluteY="30dp"
+        tools:ignore="MissingConstraints" />
 </android.support.constraint.ConstraintLayout>

@@ -1,8 +1,10 @@
 package com.example.amze.myapplication;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -15,11 +17,15 @@ import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.amze.myapplication.tools.MyServer;
@@ -36,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Boolean serverRunningState = false;
     ListView wifiList;
+    EditText edit;
+
+    final Context context = this;
 
 
     Button button;
@@ -87,11 +96,40 @@ public class MainActivity extends AppCompatActivity {
             }
             wifiList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+                public void onItemClick(final AdapterView<?> listView, View view, int position, long id) {
                     String ssid = (String) listView.getAdapter().getItem(position);
-                    Intent intent = new Intent(listView.getContext(), ChatActivity.class);
+                    final Intent intent = new Intent(listView.getContext(), ChatActivity.class);
                     intent.putExtra("name", ssid);
-                    listView.getContext().startActivity(intent);
+                    LayoutInflater li = LayoutInflater.from(context);
+                    View promptsView = li.inflate(R.layout.prompts, null);
+
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            context);
+
+                    // set prompts.xml to alertdialog builder
+                    alertDialogBuilder.setView(promptsView);
+
+                    final EditText userInput = (EditText) promptsView
+                            .findViewById(R.id.editTextDialogUserInput);
+                    alertDialogBuilder.setCancelable(false);
+                    alertDialogBuilder.setTitle("Please Write Password For Wifi");
+                    alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            //Action for "Delete".
+                            listView.getContext().startActivity(intent);
+                        }
+                    })
+                            .setNegativeButton("Cancel ", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Action for "Cancel".
+                                }
+                            });
+
+                    final AlertDialog alert = alertDialogBuilder.create();
+                    alert.show();
+
                 }
 
             });

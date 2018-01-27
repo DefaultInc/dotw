@@ -1,7 +1,9 @@
 package com.example.amze.myapplication;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -14,6 +16,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.amze.myapplication.tools.MyServer;
@@ -23,11 +26,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private WifiManager wifiManager;
     ConnectivityManager cman;
+    ListView view;
+    Intent intent;
     private MyServer serverInstance = MyServer.getInstance();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
 
-    ListView view;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +40,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        Intent intent = getIntent();
+        intent = getIntent();
         view = findViewById(R.id.message_list);
-
 
     }
 
