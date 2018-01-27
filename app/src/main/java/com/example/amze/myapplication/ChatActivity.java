@@ -20,11 +20,15 @@ import com.example.amze.myapplication.tools.MyServer;
 import com.example.amze.myapplication.tools.WifiProvider;
 
 public class ChatActivity extends AppCompatActivity {
+
     private WifiManager wifiManager;
     ConnectivityManager cman;
     private MyServer serverInstance = MyServer.getInstance();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
+
+    ListView view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,7 @@ public class ChatActivity extends AppCompatActivity {
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         Intent intent = getIntent();
+        view = findViewById(R.id.message_list);
 
 
     }
@@ -49,6 +54,10 @@ public class ChatActivity extends AppCompatActivity {
 
 
         }
+
+
+        Log.d("a", intent.getStringExtra("name").toString());
+
 
     }
 
