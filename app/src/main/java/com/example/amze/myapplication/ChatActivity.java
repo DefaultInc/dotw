@@ -72,11 +72,12 @@ public class ChatActivity extends AppCompatActivity {
                     HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString(), myIp);
 
                 }
-                msg.setText("");
+
                 messages.add(userName.getText().toString() + ": " + msg.getText().toString());
                 ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
                 listView.setAdapter(itemsAdapter);
                 listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
+                msg.setText("");
 
             }
         });
