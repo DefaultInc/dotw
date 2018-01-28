@@ -44,4 +44,5 @@ public class HttpClient {
             send("http://" + ip + ":8080", msg, "bcast", userName );
         }
     }
+
 }

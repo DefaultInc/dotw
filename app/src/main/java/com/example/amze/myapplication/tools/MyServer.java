@@ -46,9 +46,11 @@ public class MyServer extends NanoHTTPD {
         String action = session.getParms().get("action");
         if(action != null) {
             if(action.equals("register") ) {
+
                 String ip = session.getParms().get("ip");
                 Log.d("register", ip);
                 users.add(ip);
+
             } else if(action.equals("send")) {
                 String msg = session.getParms().get("msg");
                 String userName = session.getParms().get("userName");
