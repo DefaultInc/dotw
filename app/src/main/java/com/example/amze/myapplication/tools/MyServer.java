@@ -60,10 +60,10 @@ public class MyServer extends NanoHTTPD {
                     initiater.sayHello(userName, msg);
                 }
             } else if(action.equals("bcast")) {
+
                 String msg = session.getParms().get("msg");
                 String userName = session.getParms().get("userName");
                 if(msg != null) {
-
                     initiater.sayHello(userName, msg);
                 }
 

@@ -59,15 +59,21 @@ public class ChatActivity extends AppCompatActivity {
         this.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(hostIp);
-                System.out.println(msg.getText().toString());
-                System.out.println(userName.getText().toString());
 
-                HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString() );
-                messages.add(userName.getText().toString() + ": " + msg.getText().toString());
-                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
-                listView.setAdapter(itemsAdapter);
-                listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
+                if(hostIp == null ) {
+                    HttpClient.broadcast(MyServer.users, msg.getText().toString(), userName.getText().toString() );
+                } else {
+                    System.out.println(hostIp);
+                    System.out.println(msg.getText().toString());
+                    System.out.println(userName.getText().toString());
+
+                    HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString() );
+                    messages.add(userName.getText().toString() + ": " + msg.getText().toString());
+                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
+                    listView.setAdapter(itemsAdapter);
+                    listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
+                }
+
             }
         });
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
