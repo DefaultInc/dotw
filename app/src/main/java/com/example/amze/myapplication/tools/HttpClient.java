@@ -6,6 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Set;
 import java.util.List;
 
 /**
@@ -14,35 +15,35 @@ import java.util.List;
 
 public class HttpClient {
 
-    public static void register(String link, String ip) {
+//    public static void register(String link, String ip) {
+//
+//        try {
+//            new RetrieveFeedTask().execute(("http://" + link + ":8080?action=register&ip=" + ip) );
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//
+//        }
+//    }
+
+
+    public static void send(String link, String msg, String action, String userName, String ip ) {
 
         try {
-            new RetrieveFeedTask().execute(("http://" + link + ":8080?action=register&ip=" + ip) );
+            new RetrieveFeedTask().execute("http://" + link + ":8080?action=" + action + "&msg=" + msg + "&userName=" + userName + "&ip=" + ip);
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
 
         }
-    }
-
-
-    public static void send(String link, String msg, String action, String userName ) {
-
-        try {
-            new RetrieveFeedTask().execute("http://" + link + ":8080?action=" + action + "&msg=" + msg + "&userName=" + userName);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-        }
 
     }
 
-    public static void broadcast(List<String> list, String msg, String userName){
+    public static void broadcast(Set<String> list, String msg, String userName){
         for (String ip: list) {
-            send(ip, msg, "bcast", userName );
+            send(ip, msg, "bcast", userName, "");
         }
     }
 

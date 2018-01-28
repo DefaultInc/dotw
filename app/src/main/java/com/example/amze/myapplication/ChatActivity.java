@@ -61,18 +61,22 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if(hostIp == null ) {
+                    System.out.println(MyServer.users.size());
+//                    HttpClient.send(MyServer.users., msg.getText().toString(), "send", userName.getText().toString() );
                     HttpClient.broadcast(MyServer.users, msg.getText().toString(), userName.getText().toString() );
                 } else {
                     System.out.println(hostIp);
                     System.out.println(msg.getText().toString());
                     System.out.println(userName.getText().toString());
 
-                    HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString() );
-                    messages.add(userName.getText().toString() + ": " + msg.getText().toString());
-                    ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
-                    listView.setAdapter(itemsAdapter);
-                    listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
+                    HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString(), myIp);
+
                 }
+                msg.setText("");
+                messages.add(userName.getText().toString() + ": " + msg.getText().toString());
+                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
+                listView.setAdapter(itemsAdapter);
+                listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
 
             }
         });
@@ -102,10 +106,10 @@ public class ChatActivity extends AppCompatActivity {
         });
 
 
-
-        if(intent.getStringExtra("ssid") != null ) {
+        String pass = intent.getStringExtra("pass");
+        if(intent.getStringExtra("ssid") != null && pass != null) {
             this.ssid = intent.getStringExtra("ssid").toString();
-            WifiProvider.connectToWifi(ssid, "smartpoint", wifiManager);
+            WifiProvider.connectToWifi(ssid, pass, wifiManager);
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
                     myIp = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
@@ -123,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
                         Log.d("MyIP", myIp);
                         userName.setText(myIp);
 
-                        HttpClient.register( hostIp, myIp);
+//                        HttpClient.register( hostIp, myIp);
                         send.setEnabled(true);
                     }
 

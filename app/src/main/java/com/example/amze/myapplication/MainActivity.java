@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("action", "shareWifi");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
 //          WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
             }
 
@@ -114,10 +115,11 @@ public class MainActivity extends AppCompatActivity {
                             .findViewById(R.id.editTextDialogUserInput);
                     alertDialogBuilder.setCancelable(false);
                     alertDialogBuilder.setTitle("Please Write Password For Wifi");
-                    alertDialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    alertDialogBuilder.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             //Action for "Delete".
+                            intent.putExtra("pass", userInput.getText().toString());
                             listView.getContext().startActivity(intent);
                         }
                     })

@@ -4,7 +4,9 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import fi.iki.elonen.NanoHTTPD;
 
@@ -15,7 +17,7 @@ import fi.iki.elonen.NanoHTTPD;
 public class MyServer extends NanoHTTPD {
     private final static int PORT = 8080;
     private static MyServer instance = null;
-    public static List<String> users = new ArrayList<String>();
+    public static Set<String> users = new LinkedHashSet<String>();
     public static Initiater initiater = null;
 
 
@@ -54,10 +56,12 @@ public class MyServer extends NanoHTTPD {
             } else if(action.equals("send")) {
                 String msg = session.getParms().get("msg");
                 String userName = session.getParms().get("userName");
+                String ip = session.getParms().get("userName");
 
                 if(msg != null) {
                     HttpClient.broadcast(users, msg, userName);
                     initiater.sayHello(userName, msg);
+                    users.add(ip);
                 }
             } else if(action.equals("bcast")) {
 
