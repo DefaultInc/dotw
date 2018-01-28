@@ -20,10 +20,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.example.amze.myapplication.tools.HttpClient;
 import com.example.amze.myapplication.tools.MyServer;
 import com.example.amze.myapplication.tools.WifiProvider;
 
@@ -43,7 +47,8 @@ public class ChatActivity extends AppCompatActivity {
     String myIp = null;
     String hostIp = null;
     List<String> messages = new ArrayList<String>();
-
+    Button send;
+    EditText msg;
 
 
 
@@ -52,6 +57,15 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        this.send = findViewById(R.id.button1);
+        this.msg = findViewById(R.id.msg);
+
+        this.send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HttpClient.send(hostIp, msg.getText().toString(), "send", myIp );
+            }
+        });
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         intent = getIntent();
@@ -84,16 +98,22 @@ public class ChatActivity extends AppCompatActivity {
             BroadcastReceiver receiver = new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
                     myIp = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
-                    Log.d("IP", myIp);
 
-                    String [] ip = myIp.split("\\.");
-//                    Log.d("IP", ip.length + "");
-                    if(ip.length != 0) {
-                        ip[ip.length - 1] = "1";
-//                    hostIp = String.join(".", ip);
-                        hostIp = ip[0] + "." + ip[1] + "." + ip[2] + ".1";
-//                        Log.d("IP", hostIp);
+                    ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    if (mWifi.isConnected()) {
+                        String [] ip = myIp.split("\\.");
+                        if(ip.length != 0) {
+                            ip[ip.length - 1] = "1";
+                            hostIp = ip[0] + "." + ip[1] + "." + ip[2] + ".1";
+                            Log.d("HOSTIP", hostIp);
+                            Log.d("MyIP", myIp);
+
+                            HttpClient.register(hostIp, myIp);
+                        }
                     }
+
+
 
                 }
             };
@@ -113,24 +133,6 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 0x2) {
-            for (int grantResult : grantResults) {
-                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-                    Log.d("PERMISSION", "not granted");
-                    return;
-                }
-            }
-            WifiProvider.shareWifi("offchat_dauren", "secret", wifiManager, getApplicationContext());
 
-
-
-        }
-
-
-        Log.d("a", intent.getStringExtra("name").toString());
-
-
-    }
 
 }
