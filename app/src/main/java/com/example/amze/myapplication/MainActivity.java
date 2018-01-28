@@ -67,11 +67,29 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+            final Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
             intent.setAction(Settings.ACTION_WIFI_SETTINGS);
             intent.putExtra("action", "shareWifi");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        context);
+
+                // set prompts.xml to alertdialog builder
+
+
+                alertDialogBuilder.setCancelable(false);
+                alertDialogBuilder.setTitle("Please Turn on Your Wifi - Router");
+                alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Action for "Delete".
+                        startActivity(intent);
+                    }
+                });
+
+                final AlertDialog alert = alertDialogBuilder.create();
+                alert.show();
+
 
 //          WifiProvider.connectToWifi("smartpoint","smartpoint", wifiManager);
             }
