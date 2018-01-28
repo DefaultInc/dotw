@@ -1,7 +1,5 @@
 package com.example.amze.myapplication.tools;
 
-import com.example.amze.myapplication.models.User;
-
 import java.util.List;
 
 /**

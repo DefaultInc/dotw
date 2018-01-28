@@ -2,8 +2,6 @@ package com.example.amze.myapplication.tools;
 
 import android.util.Log;
 
-import com.example.amze.myapplication.models.User;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +15,9 @@ import fi.iki.elonen.NanoHTTPD;
 public class MyServer extends NanoHTTPD {
     private final static int PORT = 8080;
     private static MyServer instance = null;
-    public static List<User> users = new ArrayList<User>();
+    public static List<String> users = new ArrayList<String>();
     public static Initiater initiater = null;
+
 
     public static MyServer getInstance() {
         if(instance == null)
@@ -59,7 +58,7 @@ public class MyServer extends NanoHTTPD {
                 String userName = session.getParms().get("userName");
 
                 if(msg != null) {
-                    HttpClient.broadcast(users, msg);
+//                    HttpClient.broadcast(users, msg);
                     initiater.sayHello(userName, msg);
                 }
 

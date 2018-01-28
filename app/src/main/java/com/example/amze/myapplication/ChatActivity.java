@@ -20,12 +20,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.amze.myapplication.tools.MyServer;
 import com.example.amze.myapplication.tools.WifiProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class ChatActivity extends AppCompatActivity {
@@ -39,7 +42,7 @@ public class ChatActivity extends AppCompatActivity {
     String ssid = null;
     String myIp = null;
     String hostIp = null;
-
+    List<String> messages = new ArrayList<String>();
 
 
 
@@ -59,8 +62,21 @@ public class ChatActivity extends AppCompatActivity {
             public void someoneSaidHello(String user, String msg) {
                 //TODO
                 Log.d("got message", user + msg);
+                messages.add(user + ": " + msg);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, messages);
+                        view.setAdapter(itemsAdapter);
+                    }
+                });
+
+
             }
         });
+
+
 
         if(intent.getStringExtra("ssid") != null ) {
             this.ssid = intent.getStringExtra("ssid").toString();
