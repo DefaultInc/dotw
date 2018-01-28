@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context="com.example.amze.myapplication.ChatActivity">
 
+    <EditText
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Your Name Here Please :)"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
     <ListView
         android:id="@+id/message_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="45dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
     </ListView>

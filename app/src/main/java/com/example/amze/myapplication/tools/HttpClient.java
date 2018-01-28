@@ -12,9 +12,9 @@ public class HttpClient {
 
     }
 
-    public static void broadcast(List<User> list, String msg){
-        for (User user: list) {
-            send("http://" + user.ip + ":8080", msg );
-        }
-    }
+//    public static void broadcast(List<User> list, String msg){
+//        for (User user: list) {
+//            send("http://" + user.ip + ":8080", msg );
+//        }
+//    }
 }
