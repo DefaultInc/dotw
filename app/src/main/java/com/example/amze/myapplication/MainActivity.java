@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, 0x12345);
+        requestPermissions(new String[]{Manifest.permission.INTERNET,}, 0x3);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +150,12 @@ public class MainActivity extends AppCompatActivity {
 
             registerReceiver(mWifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
             wifiManager.startScan();
+        }
+
+        if(requestCode == 0x3) {
+            for (int grantResult : grantResults) {
+                System.out.println("internet" + (grantResult == PackageManager.PERMISSION_GRANTED));
+            }
         }
 
     }

@@ -59,7 +59,6 @@ public class MyServer extends NanoHTTPD {
                     HttpClient.broadcast(users, msg, userName);
                     initiater.sayHello(userName, msg);
                 }
-
             } else if(action.equals("bcast")) {
                 String msg = session.getParms().get("msg");
                 String userName = session.getParms().get("userName");
@@ -97,6 +96,8 @@ public class MyServer extends NanoHTTPD {
                 hl.someoneSaidHello(user, msg);
         }
     }
+
+
 
     // Someone interested in "Hello" events
     public static  class Responder implements HelloListener {

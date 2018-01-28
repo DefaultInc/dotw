@@ -1,19 +1,13 @@
 package com.example.amze.myapplication;
 
-import android.Manifest;
 import android.content.BroadcastReceiver;
-import android.app.AlertDialog;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.amze.myapplication.tools.HttpClient;
 import com.example.amze.myapplication.tools.MyServer;
@@ -33,7 +26,6 @@ import com.example.amze.myapplication.tools.WifiProvider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -41,15 +33,16 @@ public class ChatActivity extends AppCompatActivity {
     ConnectivityManager cman;
 
     MyServer myServer = MyServer.getInstance();
-    ListView view;
+    ListView listView = null;
     Intent intent;
     String ssid = null;
     String myIp = null;
     String hostIp = null;
     List<String> messages = new ArrayList<String>();
+
     Button send;
     EditText msg;
-
+    EditText userName;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -59,18 +52,29 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         this.send = findViewById(R.id.button1);
         this.msg = findViewById(R.id.msg);
+        this.userName = findViewById(R.id.userName);
+        listView = findViewById(R.id.message_list);
+
 
         this.send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HttpClient.send(hostIp, msg.getText().toString(), "send", myIp );
+                System.out.println(hostIp);
+                System.out.println(msg.getText().toString());
+                System.out.println(userName.getText().toString());
+
+                HttpClient.send(hostIp, msg.getText().toString(), "send", userName.getText().toString() );
+                messages.add(userName.getText().toString() + ": " + msg.getText().toString());
+                ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_sender, R.id.text_sender_body, messages);
+                listView.setAdapter(itemsAdapter);
+                listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
             }
         });
         wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         cman = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         intent = getIntent();
 //        myServer.startServer();
-        view = findViewById(R.id.message_list);
+
         MyServer.initiater.addListener(new MyServer.Responder() {
             @Override
             public void someoneSaidHello(String user, String msg) {
@@ -82,7 +86,8 @@ public class ChatActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         ArrayAdapter<String> itemsAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.item_message_received, R.id.text_message_body, messages);
-                        view.setAdapter(itemsAdapter);
+                        listView.setAdapter(itemsAdapter);
+                        listView.smoothScrollToPosition(itemsAdapter.getCount() -1);
                     }
                 });
 
@@ -99,20 +104,22 @@ public class ChatActivity extends AppCompatActivity {
                 public void onReceive(Context context, Intent intent) {
                     myIp = Formatter.formatIpAddress(wifiManager.getConnectionInfo().getIpAddress());
 
-                    ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                    if (mWifi.isConnected()) {
-                        String [] ip = myIp.split("\\.");
-                        if(ip.length != 0) {
-                            ip[ip.length - 1] = "1";
-                            hostIp = ip[0] + "." + ip[1] + "." + ip[2] + ".1";
-                            Log.d("HOSTIP", hostIp);
-                            Log.d("MyIP", myIp);
+//                    ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//                    if (mWifi.isConnected()) {
+//
+//                    }
+                    String [] ip = myIp.split("\\.");
+                    if(ip.length != 0 && !ip[0].equals("0")) {
+                        ip[ip.length - 1] = "1";
+                        hostIp = ip[0] + "." + ip[1] + "." + ip[2] + ".1";
+                        Log.d("HOSTIP", hostIp);
+                        Log.d("MyIP", myIp);
+                        userName.setText(myIp);
 
-                            HttpClient.register(hostIp, myIp);
-                        }
+                        HttpClient.register( hostIp, myIp);
+                        send.setEnabled(true);
                     }
-
 
 
                 }
@@ -120,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
 
             registerReceiver(receiver, new IntentFilter("android.net.wifi.STATE_CHANGE"));
         } else {
-
+            send.setEnabled(true);
         }
 
     }
